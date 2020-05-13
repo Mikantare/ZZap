@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,6 +14,8 @@ import com.example.zzap.api.ApiFactory;
 import com.example.zzap.api.ApiService;
 import com.example.zzap.pojo.BrandPart;
 import com.example.zzap.pojo.BrandPartResponse;
+
+import java.util.ArrayList;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewBrand.setVisibility(View.VISIBLE);
         recyclerViewBrand.setLayoutManager(new LinearLayoutManager(this));
         brandPartAdapter = new BrandPartAdapter();
+        brandPartAdapter.setBrandParts(new ArrayList<BrandPart>());
         recyclerViewBrand.setAdapter(brandPartAdapter);
         ApiFactory apiFactory = ApiFactory.getInstance();
         ApiService apiService = apiFactory.getApiService();
@@ -50,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Toast.makeText(MainActivity.this, "Ошибка получения данных", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.i("throwable", throwable.getMessage());
                     }
                 });
     }
